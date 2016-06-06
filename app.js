@@ -5,10 +5,18 @@ var Config = require('./config/config.js');
  */
 
 var mongoose = require('mongoose');
-mongoose.connect([Config.db.host, '/', Config.db.name].join(''),{
+var dump = require('./dump/dump');
+
+var connection = mongoose.connect([Config.db.host, '/', Config.db.name].join(''),{
     //eventually it's a good idea to make this secure
     user: Config.db.user,
     pass: Config.db.pass
+});
+
+mongoose.connection.on('open', function(){
+    connection.connection.db.dropDatabase(function(err, result){
+        dump.create();
+    });
 });
 
 /**
@@ -25,6 +33,7 @@ var app = express();
  * app setup
  */
 
+app.use(express.static(__dirname + "/frontend"));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -46,10 +55,9 @@ jwtConfig(passport);
  */
 
 var userRoutes = require("./user/userRoutes");
-var movieRoutes = require("./movie/movieRoutes");
+var daycycleRoutes = require("./daycycle/daycycleRoutes");
 
-app.use('/api', movieRoutes(passport));
+app.use('/api', daycycleRoutes(passport));
 app.use('/', userRoutes(passport));
-
 
 module.exports = app;
