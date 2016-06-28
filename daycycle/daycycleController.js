@@ -13,7 +13,6 @@ exports.postDaycycle = function(req, res) {
 //    if (!req.user.equals(daycycle.user)) {
 //        res.sendStatus(401);
 //    }
-
     daycycle.save(function(err, d) {
         if (err) {
             res.status(500).send(err);

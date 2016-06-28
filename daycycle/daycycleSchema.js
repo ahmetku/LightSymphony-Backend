@@ -15,13 +15,18 @@ var Schema = new mongoose.Schema({
     maxmoonlight: {
         type: Number,
         default: 50
-    }
-/*    uniqueID:{
+    },
+    uniqueID:{
         type: String,
-        required: false, //normal war es auf true
-        //unique: true
+        required: true, //normal war es auf true
+        unique: true
+    },
+    owner:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required:false
     }
-    */
+
 });
 
 // Export the Mongoose model
