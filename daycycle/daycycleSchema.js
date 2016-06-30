@@ -7,7 +7,11 @@ var Schema = new mongoose.Schema({
         type: String,
         unique: true
     },
-    configuration:String,
+    configuration:
+    {
+        type:String,
+        required: true
+    },
     description: {
         type: String,
         default: "Day-Cycle Configuration"

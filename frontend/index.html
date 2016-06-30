@@ -1,6 +1,8 @@
 <!DOCTYPE>
 <html ng-app="myApp">
 <head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
@@ -10,34 +12,7 @@
     <title>Light Symphony</title>
 </head>
 <body>
-<div class="container" ng-controller="AppCtrl">
-    <div ng-include="'header.html'"></div>
-    <div ng-include=page></div>
-    <h1>Day Cycles</h1>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Code</th>
-            <th>Title</th>
-            <th>Configuration</th>
-            <th>Moon Intensity</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="daycycle in daycycles">
-            <td>{{daycycle.uniqueID}}</td>
-            <td>{{daycycle.title}}</td>
-            <td>{{daycycle.configuration}}</td>
-            <td>{{daycycle.maxmoonlight}}</td>
-            <td>{{daycycle.description}}</td>
-        </tr>
-        </tbody>
-    </table>
-
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-<script src="viewController.js"></script>
+<daycycle-list></daycycle-list>
+<!--<script src="viewController.js"></script>-->
 </body>
 </html>

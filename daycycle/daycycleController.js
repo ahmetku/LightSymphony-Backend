@@ -89,3 +89,94 @@ exports.deleteDaycycle = function(req, res) {
 
     });
 };
+
+
+/*this will handle paraeterized url for get*/
+/*GET channel congifuration listings*/
+module.exports.createEmptyResponse = function(req, res, next)
+{
+    req.config = [];
+    return next();
+};
+
+module.exports.sendAll = function(req, res, next){
+    var title = req.query.title;
+    var uniqueId = req.query.id;
+    if(!title && !uniqueId)
+    {
+        Daycycle.find({})
+            .exec(function (err, dayCycle) {
+                if(err){
+                    console.log('Error occured while serving all day-cycles');
+                    console.error(err.stack);
+                    var error= new Error("An error occured while processing this request."); //don't expose actual error
+                    return next(error);
+
+                }else{
+                    console.log('Serving all day cycles');
+                    dayCycle.forEach(function (item) {
+                        req.config.push(item);
+                    })
+
+                    return next();
+                }
+            });
+    }
+    else if(title && uniqueId){
+        Daycycle.findOne({
+            "uniqueID":uniqueId
+        }, function(err, dayCycle){
+            if(err){
+                console.log("Error occured while searching for day-cycles with uniqueID "+uniqueId);
+                console.error(err.stack);
+                var error= new Error("An error occured while processing this request."); //don't expose actual error
+                return next(error);
+            }else{
+                console.log("Serving day-cycles with uniqueID "+uniqueId+ " and title"+title);
+                if(dayCycle && dayCycle.title === title)
+                    req.config.push(dayCycle);
+                return next();
+            }
+        });
+    }
+    else if(uniqueId){
+        Daycycle.findOne({
+            "uniqueID":uniqueId
+        }, function(err, dayCycle){
+            if(err){
+                console.log("Error occured while searching for day-cycles with uniqueID "+uniqueId);
+                console.error(err.stack);
+                var error= new Error("An error occured while processing this request."); //don't expose actual error
+                return next(error);
+            }else{
+                console.log("Serving day-cycles with uniqueID "+uniqueId);
+                if(dayCycle)
+                    req.config.push(dayCycle);
+                return next();
+            }
+        });
+    }
+    else if(title){
+        Daycycle.find({
+            "title": {"$regex": title, "$options": "i"}
+        }, function (err, dayCycle) {
+            if(err){
+                console.log("Error occured while searching for day-cycles with "+title +" in their title");
+                console.error(err.stack);
+                var error= new Error("An error occured while processing this request."); //don't expose actual error
+                next(error);
+            }else{
+                console.log("Serving day-cycles with "+title +" in their title");
+                dayCycle.forEach(function (item) {
+                    console.log(item);
+                    req.config.push(item);
+                })
+                return next();
+            }
+        });
+    }
+};
+
+module.exports.returnCollectedConfig = function(req, res){
+    res.json(req.config);
+};
