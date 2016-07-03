@@ -7,11 +7,12 @@ var userSchema = mongoose.Schema({
         required: true,
         unique: true
     },
-    email: {
+    password: {
         type: String,
         required: true
     }
 });
+
 
 userSchema.pre('save', function(next) {
     var user = this;
