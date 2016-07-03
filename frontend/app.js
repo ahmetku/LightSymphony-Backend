@@ -74,6 +74,9 @@ myApp = angular
 
         this.register = register;
         this.login = login;
+        this.forgot = forgot;
+        this.getReset = getReset;
+        this.postReset = postReset;
         this.loggedIn = auth.isAuthed;
         this.logout = auth.deleteToken;
         this.getUser = getUser;
@@ -90,6 +93,24 @@ myApp = angular
         function login(user, pass) {
             return $http.post(BASEURL + '/login', {
                 username: user,
+                password: pass
+            });
+        }
+
+        function forgot(user) {
+            return $http.post(BASEURL + '/forgot', {
+                username: user
+            });
+        }
+
+        function getReset(user) {
+            return $http.get(BASEURL + '/reset/:token', {
+                username: user
+            });
+        }
+
+        function postReset(pass) {
+            return $http.post(BASEURL + '/reset/:token', {
                 password: pass
             });
         }
@@ -113,11 +134,9 @@ myApp = angular
         $scope.errorText = '';
 
         $scope.register = register;
-        // $scope.cancel = cancel;
 
         function register() {
             currUser.register($scope.username, $scope.pwd).then(function () {
-                //       $mdDialog.hide();
             }, function (response) {
                 debugger;
                 if (response.status == 400 || response.status == 401) {
@@ -125,10 +144,6 @@ myApp = angular
                 }
             });
         }
-
-        //     function cancel() {
-        //         $mdDialog.cancel();
-        //     }
     }])
 
 
@@ -151,6 +166,44 @@ myApp = angular
             });
         }
     }])
+
+    .controller("forgot", ["$scope", "currUser", function ($scope, currUser) {
+        $scope.username = '';
+        $scope.errorText = '';
+
+        $scope.forgot = forgot;
+
+        function forgot() {
+            currUser.forgot($scope.username).then(function () {
+
+            }, function (response) {
+                debugger;
+                if (response.status == 400 || response.status == 401) {
+                    $scope.errorText = "An unknown error occured. please try again later.";
+                }
+            });
+        }
+    }])
+
+    .controller("postReset", ["$scope", "currUser", function ($scope, currUser) {
+        $scope.pwd = '';
+        $scope.errorText = '';
+        
+        $scope.postReset = postReset;
+
+        function postReset() {
+            currUser.postReset($scope.pwd).then(function () {
+     
+            }, function (response) {
+                debugger;
+                if (response.status == 400 || response.status == 401) {
+                    $scope.errorText = "An unknown error occured. please try again later.";
+                }
+            });
+        }
+    }])
+
+
 
 /*
 

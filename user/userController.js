@@ -126,7 +126,7 @@ module.exports.postForgot = function (req, res, next) {
             };
 
             transporter.sendMail(mailOptions, function (err) {
-                res.status(400).send('An e-mail has been sent to ' + user.username + ' with further instructions.');
+                res.status(201).send('An e-mail has been sent to ' + user.username + ' with further instructions.');
                 done(err, 'done');
             });
         }
