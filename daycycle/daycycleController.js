@@ -5,12 +5,9 @@ var Daycycle = require('./daycycleSchema');
 exports.postDaycycle = function(req, res) {
 
     var daycycle = new Daycycle(req.body);
-    console.log(req.body);
 
-//    console.log(daycycle);
-
-    //do not allow user to fake identity. The user who postet the movie must be the same user that is logged in
-//    if (!req.user.equals(daycycle.user)) {
+    //do not allow user to fake identity. The user who postet the daycylce must be the same user that is logged in
+//    if (!req.user.equals(daycycle.owner)) {
 //        res.sendStatus(401);
 //    }
     daycycle.save(function(err, d) {

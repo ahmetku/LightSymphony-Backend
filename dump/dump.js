@@ -2,6 +2,8 @@ module.exports = dump;
 
 var Daycycle = require('../daycycle/daycycleSchema');
 
+var User = require('../user/userSchema');
+
 var randomString = require('randomstring');
 function dump() {
 
@@ -35,7 +37,12 @@ dump.create = function() {
         
     });
 
+    var user1 = new User({
+        username: 'ahmetk_53@hotmail.de',
+        password: '123'
+    })
 
+    user1.save();
     daycycle1.save();
     daycycle2.save();
     daycycle3.save();

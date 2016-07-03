@@ -10,7 +10,9 @@ var userSchema = mongoose.Schema({
     email: {
         type: String,
         required: true
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
 
 userSchema.pre('save', function(next) {
