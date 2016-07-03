@@ -4,8 +4,8 @@ var jwt = require('jwt-simple');
 
 module.exports.login = function(req, res){
 
-    if(!req.body.username){
-        res.status(400).send('username required');
+    if(!req.body.useremail){
+        res.status(400).send('useremail required');
         return;
     }
     if(!req.body.password){
@@ -13,7 +13,7 @@ module.exports.login = function(req, res){
         return;
     }
 
-    User.findOne({username: req.body.username}, function(err, user){
+    User.findOne({useremail: req.body.useremail}, function(err, user){
         if (err) {
             res.status(500).send(err);
             return
@@ -35,8 +35,8 @@ module.exports.login = function(req, res){
 };
 
 module.exports.signup = function(req, res){
-    if(!req.body.username){
-        res.status(400).send('username required');
+    if(!req.body.useremail){
+        res.status(400).send('useremail required');
         return;
     }
     if(!req.body.password){
@@ -46,7 +46,7 @@ module.exports.signup = function(req, res){
 
     var user = new User();
 
-    user.username = req.body.username;
+    user.useremail = req.body.useremail;
     user.password = req.body.password;
 
     user.save(function(err) {
@@ -71,7 +71,7 @@ function createToken(user) {
     var tokenPayload = {
         user: {
             _id: user._id,
-            username: user.username
+            useremail: user.useremail
         }
 
     };

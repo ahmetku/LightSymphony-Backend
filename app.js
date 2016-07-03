@@ -14,9 +14,9 @@ var connection = mongoose.connect([Config.db.host, '/', Config.db.name].join('')
 });
 
 mongoose.connection.on('open', function(){
-    connection.connection.db.dropDatabase(function(err, result){
+    /*connection.connection.db.dropDatabase(function(err, result){
         dump.create();
-    });
+    });*/
 });
 
 /**
