@@ -20,12 +20,14 @@ module.exports.login = function(req, res){
         }
 
         if (!user) {
-            res.status(401).send('Invalid Credentials');
+            console.log("Invalid Credentials.User not found");
+            res.status(401).send('Invalid Credentials.User not found');
             return;
         }
         user.comparePassword(req.body.password, function(err, isMatch) {
             if(!isMatch || err){
-                res.status(401).send('Invalid Credentials');
+                console.log("Invalid Credentials.Password incorrect");
+                res.status(401).send('Invalid Credentials.Password incorrect');
             } else {
                 res.status(200).json({token: createToken(user)});
             }
