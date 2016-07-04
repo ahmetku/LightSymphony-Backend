@@ -7,7 +7,7 @@ var nodemailer = require('nodemailer');
 
 module.exports.login = function (req, res) {
 
-    if (!req.body.username) {
+    if (!req.body.useremail) {
         res.status(400).send('username required');
         return;
     }
@@ -16,7 +16,7 @@ module.exports.login = function (req, res) {
         return;
     }
 
-    User.findOne({username: req.body.username}, function (err, user) {
+    User.findOne({useremail: req.body.useremail}, function (err, user) {
         if (err) {
             res.status(500).send(err);
             return
@@ -38,8 +38,8 @@ module.exports.login = function (req, res) {
 };
 
 module.exports.signup = function (req, res) {
-    if (!req.body.username) {
-        res.status(400).send('username required');
+    if (!req.body.useremail) {
+        res.status(400).send('useremail required');
         return;
     }
     if (!req.body.password) {
@@ -49,7 +49,7 @@ module.exports.signup = function (req, res) {
 
     var user = new User();
 
-    user.username = req.body.username;
+    user.useremail = req.body.useremail;
     user.password = req.body.password;
 
     user.save(function (err) {
@@ -74,7 +74,7 @@ function createToken(user) {
     var tokenPayload = {
         user: {
             _id: user._id,
-            username: user.username
+            useremail: user.useremail
         }
 
     };
@@ -99,7 +99,7 @@ module.exports.postForgot = function (req, res, next) {
             });
         },
         function (token, done) {
-            User.findOne({username: req.body.username}, function (err, user) {
+            User.findOne({useremail: req.body.useremail}, function (err, user) {
                 if (!user) {
                     // req.flash('error', 'No account with that email address exists.');
                     res.status(400).send('No account with that email address exists.');
@@ -116,7 +116,7 @@ module.exports.postForgot = function (req, res, next) {
         },
         function (token, user, done) {
             var mailOptions = {
-                to: user.username,
+                to: user.useremail,
                 from: 'passwordreset@demo.com',
                 subject: 'Node.js Password Reset',
                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
@@ -126,7 +126,7 @@ module.exports.postForgot = function (req, res, next) {
             };
 
             transporter.sendMail(mailOptions, function (err) {
-                res.status(201).send('An e-mail has been sent to ' + user.username + ' with further instructions.');
+                res.status(201).send('An e-mail has been sent to ' + user.useremail + ' with further instructions.');
                 done(err, 'done');
             });
         }
@@ -176,11 +176,11 @@ module.exports.postReset = function (req, res) {
         },
         function (user, done) {
             var mailOptions = {
-                to: user.username,
+                to: user.useremail,
                 from: 'passwordreset@demo.com',
                 subject: 'Your password has been changed',
                 text: 'Hello,\n\n' +
-                'This is a confirmation that the password for your account ' + user.username + ' has just been changed.\n'
+                'This is a confirmation that the password for your account ' + user.useremail + ' has just been changed.\n'
             };
             transporter.sendMail(mailOptions, function (err) {
                 res.status(400).send('Success! Your password has been changed.');
