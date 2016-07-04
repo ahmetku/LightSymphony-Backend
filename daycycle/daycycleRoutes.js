@@ -13,7 +13,7 @@ function daycycleRoutes(passport) {
         .post(daycycleController.postDaycycle)
         .get(daycycleController.getDaycycles);
 
-    router.route('/daycycles/:daycycles_id')
+    router.route('/daycycles/:daycycle_id')
         .get(daycycleController.getDaycycle)
         .put(daycycleController.putDaycycle)
         .delete(daycycleController.deleteDaycycle);
