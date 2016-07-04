@@ -154,7 +154,8 @@ module.exports.createEmptyResponse = function(req, res, next)
 module.exports.sendAll = function(req, res, next){
     var title = req.query.title;
     var uniqueId = req.query.id;
-    if(!title && !uniqueId)
+    var useremail = req.query.useremail;
+    if(!title && !uniqueId && !useremail)
     {
         Daycycle.find({})
             .exec(function (err, dayCycle) {
@@ -173,6 +174,42 @@ module.exports.sendAll = function(req, res, next){
                     return next();
                 }
             });
+    }
+    else if(useremail)
+    {
+        User.findOne({"useremail":useremail},
+        function (err, usr) {
+            if(err)
+            {
+                console.log("Error occured while searching for day-cycles with useremail "+useremail);
+                console.error(err.stack);
+                var error= new Error("An error occured while processing this request."); //don't expose actual error
+                return next(error);
+            }
+            else{
+                Daycycle.find({
+                    "owner":usr._id
+                },function(err, dayCycle){
+                    if(err){
+                        console.log("Error occured while searching for day-cycles with useremail "+useremail);
+                        console.error(err.stack);
+                        var error= new Error("An error occured while processing this request."); //don't expose actual error
+                        return next(error);
+                    }else{
+                        console.log("Serving day-cycles with useremail "+useremail);
+                        if(dayCycle)
+                        {
+                            console.log(JSON.stringify(dayCycle));
+                            req.config.push(dayCycle);
+                        }
+                        else
+                            console.log("daycycle was null");
+                        return next();
+                    }
+                });
+            }
+        });
+
     }
     else if(title && uniqueId){
         Daycycle.findOne({
